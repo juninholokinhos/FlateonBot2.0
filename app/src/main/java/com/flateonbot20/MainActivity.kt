@@ -212,45 +212,24 @@ class MainActivity : Activity() {
 
     private fun iniciarPainel() {
 
-        if (!Settings.canDrawOverlays(this)) {
+    val intent = Intent(this, BotOverlayService::class.java)
 
-            Toast.makeText(
-                this,
-                "Precisamos permitir a sobreposição na tela.",
-                Toast.LENGTH_LONG
-            ).show()
+    try {
 
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-
-            startActivity(intent)
-
-        } else {
-
-            val intent = Intent(this, BotOverlayService::class.java)
-
-            startService(intent)
-
-            Toast.makeText(
-                this,
-                "Painel do FlateonBot iniciado.",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    private fun pararPainel() {
-
-        val intent = Intent(this, BotOverlayService::class.java)
-
-        stopService(intent)
+        startService(intent)
 
         Toast.makeText(
             this,
-            "Painel do FlateonBot parado.",
+            "Painel do FlateonBot iniciado.",
             Toast.LENGTH_SHORT
+        ).show()
+
+    } catch (e: Exception) {
+
+        Toast.makeText(
+            this,
+            "Não foi possível iniciar o painel.",
+            Toast.LENGTH_LONG
         ).show()
     }
 }
