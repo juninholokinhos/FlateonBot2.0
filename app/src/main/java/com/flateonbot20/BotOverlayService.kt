@@ -1,16 +1,21 @@
+```kotlin
 package com.flateonbot20
 
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.net.Uri
+import android.os.Build
 import android.os.IBinder
+import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 
 class BotOverlayService : Service() {
 
@@ -27,10 +32,24 @@ class BotOverlayService : Service() {
 
     private fun criarPainel() {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+
+                Toast.makeText(
+                    this,
+                    "Permissão de sobreposição não está ativada.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                stopSelf()
+                return
+            }
+        }
+
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(20, 20, 20, 20)
-            setBackgroundColor(Color.argb(220, 30, 30, 30))
+            setBackgroundColor(Color.argb(230, 30, 30, 30))
         }
 
         val titulo = TextView(this).apply {
@@ -71,7 +90,7 @@ class BotOverlayService : Service() {
         painel = layout
 
         val tipoJanela =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {
                 WindowManager.LayoutParams.TYPE_PHONE
@@ -88,14 +107,36 @@ class BotOverlayService : Service() {
         params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
         params.y = 100
 
-        windowManager.addView(painel, params)
+        try {
+
+            windowManager.addView(painel, params)
+
+            Toast.makeText(
+                this,
+                "Painel criado com sucesso.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        } catch (e: Exception) {
+
+            Toast.makeText(
+                this,
+                "Erro ao criar painel: ${e.message}",
+                Toast.LENGTH_LONG
+            ).show()
+
+            stopSelf()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
         if (::painel.isInitialized) {
-            windowManager.removeView(painel)
+            try {
+                windowManager.removeView(painel)
+            } catch (_: Exception) {
+            }
         }
     }
 
@@ -103,3 +144,4 @@ class BotOverlayService : Service() {
         return null
     }
 }
+```
