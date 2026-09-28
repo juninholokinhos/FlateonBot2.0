@@ -20,7 +20,9 @@
             </intent-filter>
 
         </activity>
-
+<service
+    android:name=".BotOverlayService"
+    android:exported="false" />
     </application>
 
 </manifest>
