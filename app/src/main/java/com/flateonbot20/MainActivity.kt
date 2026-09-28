@@ -1,10 +1,12 @@
 package com.flateonbot20
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.graphics.Color
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -66,11 +68,7 @@ class MainActivity : Activity() {
             text = "▶️ Iniciar"
 
             setOnClickListener {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Selecione uma rota para iniciar.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                iniciarPainel()
             }
         }
 
@@ -90,11 +88,7 @@ class MainActivity : Activity() {
             text = "⏹️ Parar"
 
             setOnClickListener {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Bot parado.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                pararPainel()
             }
         }
 
@@ -214,5 +208,49 @@ class MainActivity : Activity() {
         layout.addView(voltar)
 
         setContentView(layout)
+    }
+
+    private fun iniciarPainel() {
+
+        if (!Settings.canDrawOverlays(this)) {
+
+            Toast.makeText(
+                this,
+                "Precisamos permitir a sobreposição na tela.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
+
+            startActivity(intent)
+
+        } else {
+
+            val intent = Intent(this, BotOverlayService::class.java)
+
+            startService(intent)
+
+            Toast.makeText(
+                this,
+                "Painel do FlateonBot iniciado.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    private fun pararPainel() {
+
+        val intent = Intent(this, BotOverlayService::class.java)
+
+        stopService(intent)
+
+        Toast.makeText(
+            this,
+            "Painel do FlateonBot parado.",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
