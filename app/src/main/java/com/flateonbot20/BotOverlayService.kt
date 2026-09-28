@@ -1,11 +1,9 @@
-```kotlin
 package com.flateonbot20
 
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.PixelFormat
-import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
@@ -34,7 +32,6 @@ class BotOverlayService : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-
                 Toast.makeText(
                     this,
                     "Permissão de sobreposição não está ativada.",
@@ -46,57 +43,58 @@ class BotOverlayService : Service() {
             }
         }
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(20, 20, 20, 20)
-            setBackgroundColor(Color.argb(230, 30, 30, 30))
+        val layout = LinearLayout(this)
+
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(20, 20, 20, 20)
+        layout.setBackgroundColor(Color.rgb(30, 30, 30))
+
+        val titulo = TextView(this)
+
+        titulo.text = "FlateonBot2.0"
+        titulo.textSize = 18f
+        titulo.setTextColor(Color.WHITE)
+        titulo.gravity = Gravity.CENTER
+
+        val status = TextView(this)
+
+        status.text = "Pontos: 0"
+        status.textSize = 16f
+        status.setTextColor(Color.WHITE)
+        status.gravity = Gravity.CENTER
+
+        val adicionar = Button(this)
+
+        adicionar.text = "Adicionar ponto"
+
+        adicionar.setOnClickListener {
+            status.text = "Ponto adicionado"
         }
 
-        val titulo = TextView(this).apply {
-            text = "🤖 FlateonBot2.0"
-            textSize = 18f
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-        }
+        val fechar = Button(this)
 
-        val status = TextView(this).apply {
-            text = "📍 Pontos: 0"
-            textSize = 16f
-            setTextColor(Color.WHITE)
-            gravity = Gravity.CENTER
-        }
+        fechar.text = "Fechar"
 
-        val adicionar = Button(this).apply {
-            text = "📍 Adicionar ponto"
-
-            setOnClickListener {
-                status.text = "📍 Ponto adicionado"
-            }
-        }
-
-        val parar = Button(this).apply {
-            text = "⏹️ Fechar"
-
-            setOnClickListener {
-                stopSelf()
-            }
+        fechar.setOnClickListener {
+            stopSelf()
         }
 
         layout.addView(titulo)
         layout.addView(status)
         layout.addView(adicionar)
-        layout.addView(parar)
+        layout.addView(fechar)
 
         painel = layout
 
-        val tipoJanela =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            }
+        val tipoJanela: Int
 
-        val params = WindowManager.LayoutParams(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            tipoJanela = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+        } else {
+            tipoJanela = WindowManager.LayoutParams.TYPE_PHONE
+        }
+
+        val parametros = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
             tipoJanela,
@@ -104,12 +102,12 @@ class BotOverlayService : Service() {
             PixelFormat.TRANSLUCENT
         )
 
-        params.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-        params.y = 100
+        parametros.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        parametros.y = 100
 
         try {
 
-            windowManager.addView(painel, params)
+            windowManager.addView(painel, parametros)
 
             Toast.makeText(
                 this,
@@ -117,11 +115,11 @@ class BotOverlayService : Service() {
                 Toast.LENGTH_SHORT
             ).show()
 
-        } catch (e: Exception) {
+        } catch (erro: Exception) {
 
             Toast.makeText(
                 this,
-                "Erro ao criar painel: ${e.message}",
+                "Erro ao criar painel.",
                 Toast.LENGTH_LONG
             ).show()
 
@@ -130,18 +128,18 @@ class BotOverlayService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
 
         if (::painel.isInitialized) {
             try {
                 windowManager.removeView(painel)
-            } catch (_: Exception) {
+            } catch (erro: Exception) {
             }
         }
+
+        super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 }
-```
