@@ -210,7 +210,7 @@ class MainActivity : Activity() {
         setContentView(layout)
     }
 
-    private fun iniciarPainel() {
+private fun iniciarPainel() {
 
     val intent = Intent(this, BotOverlayService::class.java)
 
