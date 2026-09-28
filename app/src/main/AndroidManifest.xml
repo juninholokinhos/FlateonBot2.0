@@ -2,6 +2,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Permissão para mostrar o painel do FlateonBot sobre outros aplicativos -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:allowBackup="false"
         android:label="FlateonBot2.0"
@@ -18,6 +21,11 @@
             </intent-filter>
 
         </activity>
+
+        <!-- Serviço responsável pelo painel flutuante -->
+        <service
+            android:name=".BotOverlayService"
+            android:exported="false" />
 
     </application>
 
