@@ -233,3 +233,18 @@ private fun iniciarPainel() {
         ).show()
     }
 }
+
+private fun pararPainel() {
+
+    val intent = Intent(this, BotOverlayService::class.java)
+
+    stopService(intent)
+
+    Toast.makeText(
+        this,
+        "Painel do FlateonBot parado.",
+        Toast.LENGTH_SHORT
+    ).show()
+}
+
+}
