@@ -2,10 +2,9 @@ package com.flateonbot20
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
-import android.graphics.Color
 import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText
@@ -64,31 +63,33 @@ class MainActivity : Activity() {
             }
         }
 
+        val ativarControle = Button(this).apply {
+            text = "🎮 Ativar controle"
+
+            setOnClickListener {
+                abrirAcessibilidade()
+            }
+        }
+
         val iniciar = Button(this).apply {
-            text = "▶️ Iniciar"
+            text = "▶️ Iniciar painel"
 
             setOnClickListener {
                 iniciarPainel()
             }
         }
 
-        val pausar = Button(this).apply {
-            text = "⏸️ Pausar"
+        val parar = Button(this).apply {
+            text = "⏹️ Parar painel"
 
             setOnClickListener {
+                FlateonAccessibilityService.pararPainel()
+
                 Toast.makeText(
                     this@MainActivity,
-                    "Bot pausado.",
+                    "Painel parado.",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
-        }
-
-        val parar = Button(this).apply {
-            text = "⏹️ Parar"
-
-            setOnClickListener {
-                pararPainel()
             }
         }
 
@@ -108,12 +109,59 @@ class MainActivity : Activity() {
         layoutPrincipal.addView(subtitulo)
         layoutPrincipal.addView(criarRota)
         layoutPrincipal.addView(minhasRotas)
+        layoutPrincipal.addView(ativarControle)
         layoutPrincipal.addView(iniciar)
-        layoutPrincipal.addView(pausar)
         layoutPrincipal.addView(parar)
         layoutPrincipal.addView(configuracoes)
 
         setContentView(layoutPrincipal)
+    }
+
+    private fun abrirAcessibilidade() {
+
+        try {
+
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+
+            startActivity(intent)
+
+            Toast.makeText(
+                this,
+                "Procure por FlateonBot2.0 em Serviços instalados e ative o serviço.",
+                Toast.LENGTH_LONG
+            ).show()
+
+        } catch (e: Exception) {
+
+            Toast.makeText(
+                this,
+                "Não foi possível abrir as configurações de acessibilidade.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun iniciarPainel() {
+
+        if (!FlateonAccessibilityService.estaAtivo()) {
+
+            Toast.makeText(
+                this,
+                "Primeiro ative o FlateonBot2.0 em Acessibilidade.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            abrirAcessibilidade()
+            return
+        }
+
+        FlateonAccessibilityService.iniciarPainel()
+
+        Toast.makeText(
+            this,
+            "Painel do FlateonBot iniciado.",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun mostrarCriadorDeRota() {
@@ -208,77 +256,5 @@ class MainActivity : Activity() {
         layout.addView(voltar)
 
         setContentView(layout)
-    }
-
-    private fun iniciarPainel() {
-
-        if (!Settings.canDrawOverlays(this)) {
-
-            val intent = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:$packageName")
-            )
-
-            try {
-
-                startActivity(intent)
-
-                Toast.makeText(
-                    this,
-                    "Ative a permissão de sobreposição para o FlateonBot2.0.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-            } catch (e: Exception) {
-
-                val intentGeral = Intent(
-                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-                )
-
-                startActivity(intentGeral)
-            }
-
-            return
-        }
-
-        val intent = Intent(
-            this,
-            BotOverlayService::class.java
-        )
-
-        try {
-
-            startService(intent)
-
-            Toast.makeText(
-                this,
-                "Painel do FlateonBot iniciado.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-        } catch (e: Exception) {
-
-            Toast.makeText(
-                this,
-                "Não foi possível iniciar o painel.",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    private fun pararPainel() {
-
-        val intent = Intent(
-            this,
-            BotOverlayService::class.java
-        )
-
-        stopService(intent)
-
-        Toast.makeText(
-            this,
-            "Painel do FlateonBot parado.",
-            Toast.LENGTH_SHORT
-        ).show()
     }
 }
