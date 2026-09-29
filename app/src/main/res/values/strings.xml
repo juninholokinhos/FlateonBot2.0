@@ -1,9 +1,0 @@
-<resources>
-
-    <string name="app_name">FlateonBot2.0</string>
-
-    <string name="accessibility_service_description">
-        Serviço de controle do FlateonBot2.0 para interação com a tela.
-    </string>
-
-</resources>
