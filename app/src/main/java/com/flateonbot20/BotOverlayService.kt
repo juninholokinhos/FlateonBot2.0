@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
-import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -30,18 +29,6 @@ class BotOverlayService : Service() {
 
     private fun criarPainel() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(
-                    this,
-                    "Permissão de sobreposição não está ativada.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                stopSelf()
-                return
-            }
-        }
 
         val layout = LinearLayout(this)
 
