@@ -29,41 +29,40 @@ class BotOverlayService : Service() {
 
     private fun criarPainel() {
 
-
-        val layout = LinearLayout(this)
-
-        layout.orientation = LinearLayout.VERTICAL
-        layout.setPadding(20, 20, 20, 20)
-        layout.setBackgroundColor(Color.rgb(30, 30, 30))
-
-        val titulo = TextView(this)
-
-        titulo.text = "FlateonBot2.0"
-        titulo.textSize = 18f
-        titulo.setTextColor(Color.WHITE)
-        titulo.gravity = Gravity.CENTER
-
-        val status = TextView(this)
-
-        status.text = "Pontos: 0"
-        status.textSize = 16f
-        status.setTextColor(Color.WHITE)
-        status.gravity = Gravity.CENTER
-
-        val adicionar = Button(this)
-
-        adicionar.text = "Adicionar ponto"
-
-        adicionar.setOnClickListener {
-            status.text = "Ponto adicionado"
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(20, 20, 20, 20)
+            setBackgroundColor(Color.rgb(30, 30, 30))
         }
 
-        val fechar = Button(this)
+        val titulo = TextView(this).apply {
+            text = "FlateonBot2.0"
+            textSize = 18f
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+        }
 
-        fechar.text = "Fechar"
+        val status = TextView(this).apply {
+            text = "Pontos: 0"
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+        }
 
-        fechar.setOnClickListener {
-            stopSelf()
+        val adicionar = Button(this).apply {
+            text = "Adicionar ponto"
+
+            setOnClickListener {
+                status.text = "Ponto adicionado"
+            }
+        }
+
+        val fechar = Button(this).apply {
+            text = "Fechar"
+
+            setOnClickListener {
+                stopSelf()
+            }
         }
 
         layout.addView(titulo)
@@ -73,13 +72,12 @@ class BotOverlayService : Service() {
 
         painel = layout
 
-        val tipoJanela: Int
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            tipoJanela = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            tipoJanela = WindowManager.LayoutParams.TYPE_PHONE
-        }
+        val tipoJanela =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_PHONE
+            }
 
         val parametros = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -104,14 +102,15 @@ class BotOverlayService : Service() {
 
         } catch (erro: Exception) {
 
-    Toast.makeText(
-        this,
-        "Erro: ${erro.javaClass.simpleName} - ${erro.message}",
-        Toast.LENGTH_LONG
-    ).show()
+            Toast.makeText(
+                this,
+                "Erro: ${erro.javaClass.simpleName} - ${erro.message}",
+                Toast.LENGTH_LONG
+            ).show()
 
-    stopSelf()
+            stopSelf()
         }
+    }
 
     override fun onDestroy() {
 
