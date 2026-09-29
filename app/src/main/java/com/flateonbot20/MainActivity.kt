@@ -283,6 +283,3 @@ private fun pararPainel() {
         Toast.LENGTH_SHORT
     ).show()
 }
-```
-
-}
