@@ -15,271 +15,270 @@ import android.widget.Toast
 
 class MainActivity : Activity() {
 
-```
-private lateinit var layoutPrincipal: LinearLayout
-private val pontosDaRota = ArrayList<String>()
+    private lateinit var layoutPrincipal: LinearLayout
+    private val pontosDaRota = ArrayList<String>()
 
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    mostrarTelaPrincipal()
-}
-
-private fun mostrarTelaPrincipal() {
-
-    layoutPrincipal = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        setPadding(32, 40, 32, 32)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mostrarTelaPrincipal()
     }
 
-    val titulo = TextView(this).apply {
-        text = "🤖 FlateonBot2.0"
-        textSize = 28f
-        gravity = Gravity.CENTER
-        setTextColor(Color.BLACK)
-    }
+    private fun mostrarTelaPrincipal() {
 
-    val subtitulo = TextView(this).apply {
-        text = "Painel de controle"
-        textSize = 18f
-        gravity = Gravity.CENTER
-        setPadding(0, 10, 0, 30)
-    }
-
-    val criarRota = Button(this).apply {
-        text = "🗺️ Criar rota"
-
-        setOnClickListener {
-            mostrarCriadorDeRota()
+        layoutPrincipal = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(32, 40, 32, 32)
         }
-    }
 
-    val minhasRotas = Button(this).apply {
-        text = "📂 Minhas rotas"
-
-        setOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "Minhas rotas serão adicionadas.",
-                Toast.LENGTH_SHORT
-            ).show()
+        val titulo = TextView(this).apply {
+            text = "🤖 FlateonBot2.0"
+            textSize = 28f
+            gravity = Gravity.CENTER
+            setTextColor(Color.BLACK)
         }
-    }
 
-    val iniciar = Button(this).apply {
-        text = "▶️ Iniciar"
-
-        setOnClickListener {
-            iniciarPainel()
+        val subtitulo = TextView(this).apply {
+            text = "Painel de controle"
+            textSize = 18f
+            gravity = Gravity.CENTER
+            setPadding(0, 10, 0, 30)
         }
-    }
 
-    val pausar = Button(this).apply {
-        text = "⏸️ Pausar"
+        val criarRota = Button(this).apply {
+            text = "🗺️ Criar rota"
 
-        setOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "Bot pausado.",
-                Toast.LENGTH_SHORT
-            ).show()
+            setOnClickListener {
+                mostrarCriadorDeRota()
+            }
         }
-    }
 
-    val parar = Button(this).apply {
-        text = "⏹️ Parar"
+        val minhasRotas = Button(this).apply {
+            text = "📂 Minhas rotas"
 
-        setOnClickListener {
-            pararPainel()
+            setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Minhas rotas serão adicionadas.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
-    }
 
-    val configuracoes = Button(this).apply {
-        text = "⚙️ Configurações"
+        val iniciar = Button(this).apply {
+            text = "▶️ Iniciar"
 
-        setOnClickListener {
-            Toast.makeText(
-                this@MainActivity,
-                "Configurações serão adicionadas.",
-                Toast.LENGTH_SHORT
-            ).show()
+            setOnClickListener {
+                iniciarPainel()
+            }
         }
-    }
 
-    layoutPrincipal.addView(titulo)
-    layoutPrincipal.addView(subtitulo)
-    layoutPrincipal.addView(criarRota)
-    layoutPrincipal.addView(minhasRotas)
-    layoutPrincipal.addView(iniciar)
-    layoutPrincipal.addView(pausar)
-    layoutPrincipal.addView(parar)
-    layoutPrincipal.addView(configuracoes)
+        val pausar = Button(this).apply {
+            text = "⏸️ Pausar"
 
-    setContentView(layoutPrincipal)
-}
-
-private fun mostrarCriadorDeRota() {
-
-    val layout = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        setPadding(32, 40, 32, 32)
-    }
-
-    val titulo = TextView(this).apply {
-        text = "🗺️ Criar nova rota"
-        textSize = 26f
-        gravity = Gravity.CENTER
-    }
-
-    val nomeRota = EditText(this).apply {
-        hint = "Nome da rota"
-        textSize = 18f
-    }
-
-    val listaPontos = TextView(this).apply {
-        text = "Nenhum ponto adicionado."
-        textSize = 17f
-        setPadding(0, 30, 0, 30)
-    }
-
-    val adicionarPonto = Button(this).apply {
-        text = "➕ Adicionar ponto"
-
-        setOnClickListener {
-
-            val numero = pontosDaRota.size + 1
-
-            pontosDaRota.add("Ponto $numero")
-
-            listaPontos.text = pontosDaRota.joinToString(
-                separator = "\n"
-            )
-
-            Toast.makeText(
-                this@MainActivity,
-                "Ponto $numero adicionado!",
-                Toast.LENGTH_SHORT
-            ).show()
+            setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Bot pausado.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
+
+        val parar = Button(this).apply {
+            text = "⏹️ Parar"
+
+            setOnClickListener {
+                pararPainel()
+            }
+        }
+
+        val configuracoes = Button(this).apply {
+            text = "⚙️ Configurações"
+
+            setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Configurações serão adicionadas.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        layoutPrincipal.addView(titulo)
+        layoutPrincipal.addView(subtitulo)
+        layoutPrincipal.addView(criarRota)
+        layoutPrincipal.addView(minhasRotas)
+        layoutPrincipal.addView(iniciar)
+        layoutPrincipal.addView(pausar)
+        layoutPrincipal.addView(parar)
+        layoutPrincipal.addView(configuracoes)
+
+        setContentView(layoutPrincipal)
     }
 
-    val salvar = Button(this).apply {
-        text = "💾 Salvar rota"
+    private fun mostrarCriadorDeRota() {
 
-        setOnClickListener {
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(32, 40, 32, 32)
+        }
 
-            val nome = nomeRota.text.toString().trim()
+        val titulo = TextView(this).apply {
+            text = "🗺️ Criar nova rota"
+            textSize = 26f
+            gravity = Gravity.CENTER
+        }
 
-            if (nome.isEmpty()) {
+        val nomeRota = EditText(this).apply {
+            hint = "Nome da rota"
+            textSize = 18f
+        }
+
+        val listaPontos = TextView(this).apply {
+            text = "Nenhum ponto adicionado."
+            textSize = 17f
+            setPadding(0, 30, 0, 30)
+        }
+
+        val adicionarPonto = Button(this).apply {
+            text = "➕ Adicionar ponto"
+
+            setOnClickListener {
+
+                val numero = pontosDaRota.size + 1
+
+                pontosDaRota.add("Ponto $numero")
+
+                listaPontos.text = pontosDaRota.joinToString(
+                    separator = "\n"
+                )
 
                 Toast.makeText(
                     this@MainActivity,
-                    "Digite um nome para a rota.",
+                    "Ponto $numero adicionado!",
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
 
-                return@setOnClickListener
+        val salvar = Button(this).apply {
+            text = "💾 Salvar rota"
+
+            setOnClickListener {
+
+                val nome = nomeRota.text.toString().trim()
+
+                if (nome.isEmpty()) {
+
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Digite um nome para a rota.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    return@setOnClickListener
+                }
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "Rota \"$nome\" salva com ${pontosDaRota.size} ponto(s).",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                pontosDaRota.clear()
+
+                mostrarTelaPrincipal()
+            }
+        }
+
+        val voltar = Button(this).apply {
+            text = "⬅️ Voltar"
+
+            setOnClickListener {
+                pontosDaRota.clear()
+                mostrarTelaPrincipal()
+            }
+        }
+
+        layout.addView(titulo)
+        layout.addView(nomeRota)
+        layout.addView(listaPontos)
+        layout.addView(adicionarPonto)
+        layout.addView(salvar)
+        layout.addView(voltar)
+
+        setContentView(layout)
+    }
+
+    private fun iniciarPainel() {
+
+        if (!Settings.canDrawOverlays(this)) {
+
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            )
+
+            try {
+
+                startActivity(intent)
+
+                Toast.makeText(
+                    this,
+                    "Ative a permissão de sobreposição para o FlateonBot2.0.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } catch (e: Exception) {
+
+                val intentGeral = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION
+                )
+
+                startActivity(intentGeral)
             }
 
-            Toast.makeText(
-                this@MainActivity,
-                "Rota \"$nome\" salva com ${pontosDaRota.size} ponto(s).",
-                Toast.LENGTH_LONG
-            ).show()
-
-            pontosDaRota.clear()
-
-            mostrarTelaPrincipal()
+            return
         }
-    }
-
-    val voltar = Button(this).apply {
-        text = "⬅️ Voltar"
-
-        setOnClickListener {
-            pontosDaRota.clear()
-            mostrarTelaPrincipal()
-        }
-    }
-
-    layout.addView(titulo)
-    layout.addView(nomeRota)
-    layout.addView(listaPontos)
-    layout.addView(adicionarPonto)
-    layout.addView(salvar)
-    layout.addView(voltar)
-
-    setContentView(layout)
-}
-
-private fun iniciarPainel() {
-
-    if (!Settings.canDrawOverlays(this)) {
 
         val intent = Intent(
-            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-            Uri.parse("package:$packageName")
+            this,
+            BotOverlayService::class.java
         )
 
         try {
 
-            startActivity(intent)
+            startService(intent)
 
             Toast.makeText(
                 this,
-                "Ative a permissão de sobreposição para o FlateonBot2.0.",
-                Toast.LENGTH_LONG
+                "Painel do FlateonBot iniciado.",
+                Toast.LENGTH_SHORT
             ).show()
 
         } catch (e: Exception) {
 
-            val intentGeral = Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION
-            )
-
-            startActivity(intentGeral)
+            Toast.makeText(
+                this,
+                "Não foi possível iniciar o painel.",
+                Toast.LENGTH_LONG
+            ).show()
         }
-
-        return
     }
 
-    val intent = Intent(
-        this,
-        BotOverlayService::class.java
-    )
+    private fun pararPainel() {
 
-    try {
+        val intent = Intent(
+            this,
+            BotOverlayService::class.java
+        )
 
-        startService(intent)
+        stopService(intent)
 
         Toast.makeText(
             this,
-            "Painel do FlateonBot iniciado.",
+            "Painel do FlateonBot parado.",
             Toast.LENGTH_SHORT
         ).show()
-
-    } catch (e: Exception) {
-
-        Toast.makeText(
-            this,
-            "Não foi possível iniciar o painel.",
-            Toast.LENGTH_LONG
-        ).show()
     }
-}
-
-private fun pararPainel() {
-
-    val intent = Intent(
-        this,
-        BotOverlayService::class.java
-    )
-
-    stopService(intent)
-
-    Toast.makeText(
-        this,
-        "Painel do FlateonBot parado.",
-        Toast.LENGTH_SHORT
-    ).show()
 }
