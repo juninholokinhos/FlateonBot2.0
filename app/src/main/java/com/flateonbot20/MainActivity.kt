@@ -24,45 +24,7 @@ class MainActivity : Activity() {
         mostrarTelaPrincipal()
     }
 
-    private fun mostrarTelaPrincipal() {
-
-        layoutPrincipal = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(32, 48, 32, 32)
-        }
-
-        val titulo = TextView(this).apply {
-            text = "FlateonBot2.0"
-            textSize = 30f
-            gravity = Gravity.CENTER
-            setTextColor(Color.BLACK)
-        }
-
-        val subtitulo = TextView(this).apply {
-            text = "Automação e gerenciamento de rotas"
-            textSize = 17f
-            gravity = Gravity.CENTER
-        }
-
-        val criarRota = Button(this).apply {
-            text = "🗺️ Criar rota"
-
-            setOnClickListener {
-                mostrarCriadorDeRota()
-            }
-        }
-
-        val minhasRotas = Button(this).apply {
-            text = "📂 Minhas rotas"
-
-            setOnClickListener {
-                Toast.makeText(
-                    this@MainActivity,
-                    "As rotas salvas serão mostradas aqui.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+    
 
         val iniciar = Button(this).apply {
             text = "▶️ Iniciar"
