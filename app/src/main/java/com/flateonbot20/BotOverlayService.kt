@@ -104,15 +104,14 @@ class BotOverlayService : Service() {
 
         } catch (erro: Exception) {
 
-            Toast.makeText(
-                this,
-                "Erro ao criar painel.",
-                Toast.LENGTH_LONG
-            ).show()
+    Toast.makeText(
+        this,
+        "Erro: ${erro.javaClass.simpleName} - ${erro.message}",
+        Toast.LENGTH_LONG
+    ).show()
 
-            stopSelf()
+    stopSelf()
         }
-    }
 
     override fun onDestroy() {
 
