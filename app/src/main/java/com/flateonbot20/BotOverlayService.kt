@@ -17,127 +17,128 @@ import android.widget.Toast
 
 class BotOverlayService : Service() {
 
-```
-private lateinit var windowManager: WindowManager
-private lateinit var painel: View
+    private lateinit var windowManager: WindowManager
+    private lateinit var painel: View
 
-override fun onCreate() {
-    super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-    windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
+        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
-    if (!Settings.canDrawOverlays(this)) {
-        Toast.makeText(
-            this,
-            "Ative a permissão 'Sobrepor a outros aplicativos'.",
-            Toast.LENGTH_LONG
-        ).show()
+        if (!Settings.canDrawOverlays(this)) {
+            Toast.makeText(
+                this,
+                "Ative a permissão de sobreposição.",
+                Toast.LENGTH_LONG
+            ).show()
 
-        stopSelf()
-        return
+            stopSelf()
+            return
+        }
+
+        criarPainel()
     }
 
-    criarPainel()
-}
+    private fun criarPainel() {
 
-private fun criarPainel() {
+        val layout = LinearLayout(this)
 
-    val layout = LinearLayout(this).apply {
-        orientation = LinearLayout.VERTICAL
-        setPadding(20, 20, 20, 20)
-        setBackgroundColor(Color.rgb(30, 30, 30))
-    }
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(20, 20, 20, 20)
+        layout.setBackgroundColor(Color.rgb(30, 30, 30))
 
-    val titulo = TextView(this).apply {
-        text = "FlateonBot2.0"
-        textSize = 18f
-        setTextColor(Color.WHITE)
-        gravity = Gravity.CENTER
-    }
+        val titulo = TextView(this)
 
-    val status = TextView(this).apply {
-        text = "Pontos: 0"
-        textSize = 16f
-        setTextColor(Color.WHITE)
-        gravity = Gravity.CENTER
-    }
+        titulo.text = "FlateonBot2.0"
+        titulo.textSize = 18f
+        titulo.setTextColor(Color.WHITE)
+        titulo.gravity = Gravity.CENTER
 
-    val adicionar = Button(this).apply {
-        text = "Adicionar ponto"
+        val status = TextView(this)
 
-        setOnClickListener {
+        status.text = "Pontos: 0"
+        status.textSize = 16f
+        status.setTextColor(Color.WHITE)
+        status.gravity = Gravity.CENTER
+
+        val adicionar = Button(this)
+
+        adicionar.text = "Adicionar ponto"
+
+        adicionar.setOnClickListener {
             status.text = "Ponto adicionado"
         }
-    }
 
-    val fechar = Button(this).apply {
-        text = "Fechar"
+        val fechar = Button(this)
 
-        setOnClickListener {
+        fechar.text = "Fechar"
+
+        fechar.setOnClickListener {
+            stopSelf()
+        }
+
+        layout.addView(titulo)
+        layout.addView(status)
+        layout.addView(adicionar)
+        layout.addView(fechar)
+
+        painel = layout
+
+        val tipoJanela =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_PHONE
+            }
+
+        val parametros = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            tipoJanela,
+            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+            PixelFormat.TRANSLUCENT
+        )
+
+        parametros.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
+        parametros.x = 0
+        parametros.y = 100
+
+        try {
+
+            windowManager.addView(painel, parametros)
+
+            Toast.makeText(
+                this,
+                "Painel criado com sucesso.",
+                Toast.LENGTH_SHORT
+            ).show()
+
+        } catch (erro: Exception) {
+
+            Toast.makeText(
+                this,
+                "Erro: ${erro.javaClass.simpleName} - ${erro.message}",
+                Toast.LENGTH_LONG
+            ).show()
+
             stopSelf()
         }
     }
 
-    layout.addView(titulo)
-    layout.addView(status)
-    layout.addView(adicionar)
-    layout.addView(fechar)
+    override fun onDestroy() {
 
-    painel = layout
+        if (::painel.isInitialized) {
 
-    val parametros = WindowManager.LayoutParams(
-        WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.WRAP_CONTENT,
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-        } else {
-            WindowManager.LayoutParams.TYPE_PHONE
-        },
-        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-        PixelFormat.TRANSLUCENT
-    )
-
-    parametros.gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL
-    parametros.x = 0
-    parametros.y = 100
-
-    try {
-
-        windowManager.addView(painel, parametros)
-
-        Toast.makeText(
-            this,
-            "Painel criado com sucesso.",
-            Toast.LENGTH_SHORT
-        ).show()
-
-    } catch (erro: Exception) {
-
-        Toast.makeText(
-            this,
-            "Erro: ${erro.javaClass.simpleName} - ${erro.message}",
-            Toast.LENGTH_LONG
-        ).show()
-
-        stopSelf()
-    }
-}
-
-override fun onDestroy() {
-
-    if (::painel.isInitialized) {
-        try {
-            windowManager.removeView(painel)
-        } catch (_: Exception) {
+            try {
+                windowManager.removeView(painel)
+            } catch (_: Exception) {
+            }
         }
+
+        super.onDestroy()
     }
 
-    super.onDestroy()
-}
-
-override fun onBind(intent: Intent?): IBinder? {
-    return null
-}
-```
-
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
 }
